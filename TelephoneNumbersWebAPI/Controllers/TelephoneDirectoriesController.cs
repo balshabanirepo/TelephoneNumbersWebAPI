@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,7 +53,9 @@ namespace VaccinationAppointmentVerificationWebAPI.Controllers
             return telephoneDirectory;
         }
         [HttpGet]
+     
         [Route("PhoneByNumber")]
+        [Authorize]
         public ActionResult<TelephoneDirectory> PhoneByNumber(string Number)
         {
             var telephoneDirectory = Telephones.Where(w => w.PhoneNumber == Number).FirstOrDefault();
