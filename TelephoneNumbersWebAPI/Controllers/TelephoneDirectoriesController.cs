@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+//using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+
 using TelephoneNumbersWebAPI.Models;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
-using System.Text;
-using TelephoneNumbersWebAPI.Controllers;
+using VaccinationAppointmentVerificationWebAPI.CustomAttribute;
 
 namespace VaccinationAppointmentVerificationWebAPI.Controllers
 {
@@ -29,20 +26,20 @@ namespace VaccinationAppointmentVerificationWebAPI.Controllers
             },
               new TelephoneDirectory
             {
-                Id=2,PhoneNumber="98765"
+                Id=1,PhoneNumber="98765"
             },
-               new TelephoneDirectory
+                  new TelephoneDirectory
             {
-                Id=3,PhoneNumber="543211"
+                Id=1,PhoneNumber="543211"
             },
               new TelephoneDirectory
             {
-                Id=4,PhoneNumber="98764"
+                Id=1,PhoneNumber="98766"
             }
         };
-        public TelephoneDirectoriesController(IConfiguration config)
+        public TelephoneDirectoriesController()
         {
-            _config = config;
+           // _context = context;
         }
 
         // GET: api/TelephoneDirectories
@@ -66,10 +63,10 @@ namespace VaccinationAppointmentVerificationWebAPI.Controllers
             return telephoneDirectory;
         }
         [HttpGet]
-     
+     [Authorize]
         [Route("PhoneByNumber")]
-        //[Authorize]
-        public ActionResult<TelephoneDirectory>  PhoneByNumber(string Number)
+        
+        public ActionResult<TelephoneDirectory> PhoneByNumber(string Number,string Token)
         {
             var telephoneDirectory = Telephones.Where(w => w.PhoneNumber == Number).FirstOrDefault();
             if (telephoneDirectory == null)
@@ -143,45 +140,5 @@ namespace VaccinationAppointmentVerificationWebAPI.Controllers
         //{
         //    return _context.Telephones.Any(e => e.Id == id);
         //}
-      
-        [Route("GetToken")]
-        [HttpPost]
-        public IActionResult GetToken([FromBody] User user)
-        {
-            IActionResult response = Unauthorized();
-
-            if (user.UserName == "JPhontain" && user.Password == "A@67b12345")
-            {
-                var tokenString = GenerateJWTToken();
-                response = Ok(new
-                {
-                    token = tokenString,
-                    userDetails = new { userName = "JPhontain", Password = "A@67b12345" }
-                });
-            }
-            return response;
-         }
-        string GenerateJWTToken()
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                new Claim("UserName","JPhontain"),
-                new Claim("fullname","Jose Phontain"),
-
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-            var token = new JwtSecurityToken(
-            issuer: _config["Jwt: Issuer"],
-            audience: _config["Jwt: Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: credentials
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        private readonly IConfiguration _config;
-       
     }
 }
