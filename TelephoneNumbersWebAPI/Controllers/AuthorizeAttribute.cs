@@ -47,8 +47,7 @@ namespace VaccinationAppointmentVerificationWebAPI.CustomAttribute
             {
                 //throw new UnauthorizedAccessException("Invalid Token");
                 context.Result = new UnauthorizedResult();
-                ////context.HttpContext.Response.StatusCode = 401;
-                //return;
+              
             }
             if (token!= systemsettingsrepository.Token)
             {
@@ -56,29 +55,7 @@ namespace VaccinationAppointmentVerificationWebAPI.CustomAttribute
                 context.Result = new UnauthorizedResult();
                // return;
             }
-            //if (!user.Identity.IsAuthenticated)
-            //    return;
-
-           // var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]));
-           // var validations = new TokenValidationParameters
-           // {
-           //     ValidateIssuerSigningKey = true,
-           //     IssuerSigningKey = mySecurityKey,
-           //     ValidateIssuer = true,
-           //     ValidateAudience = true,
-           //     ValidateLifetime = false,
-           //     // Add these...
-           //     ValidIssuer = _configuration["Jwt:Issuer"],
-           //     ValidAudience = _configuration["Jwt:Audience"]
-           // };
-           // //if (authHeader.Value.First().StartsWith("bearer", StringComparison.OrdinalIgnoreCase))
-           //// {
-           //    // var token = authHeader.Value.First().Substring("bearer ".Length).Trim();
-           //     var tokenHandler = new JwtSecurityTokenHandler();
-           //     tokenHandler.ValidateToken(token, validations, out SecurityToken validatedToken);
-           //     if (validatedToken.ValidTo < DateTime.UtcNow)
-           //         throw new UnauthorizedAccessException("Invalid Token");
-           // //}
+          
         }
     }
 }
