@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using TelephoneNumbersWebAPI.Helpers;
 
 namespace TelephoneNumbersWebAPI
 {
@@ -28,8 +29,7 @@ namespace TelephoneNumbersWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-           .AddJwtBearer();
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,11 +40,12 @@ namespace TelephoneNumbersWebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting(); 
+            app.UseRouting();  
             app.UseAuthentication();
 
             app.UseAuthorization();
 
+            app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

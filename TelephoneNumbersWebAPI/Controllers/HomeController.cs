@@ -66,7 +66,7 @@ namespace TelephoneNumbersWebAPI.Controllers
         string GenerateJWTToken()
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            
             var claims = new[]
             {
                 new Claim("UserName","JPhontain"),
@@ -79,7 +79,7 @@ namespace TelephoneNumbersWebAPI.Controllers
             audience: _config["Jwt: Audience"],
             claims: claims,
             //expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: credentials
+            signingCredentials : new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
