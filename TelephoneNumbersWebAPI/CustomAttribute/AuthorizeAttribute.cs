@@ -13,20 +13,20 @@ using System.Text;
 namespace VaccinationAppointmentVerificationWebAPI.CustomAttribute
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    
 
 
 
-        public class AuthorizeAttribute : Attribute, IAuthorizationFilter
+
+    public class AuthorizeAttribute : Attribute, IAuthorizationFilter
+    {
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            public void OnAuthorization(AuthorizationFilterContext context)
+            var user = context.HttpContext.Items["userName"].ToString();
+            if (!user.Contains("JPhontain"))
             {
-                var user =context.HttpContext.Items["userName"].ToString();
-                if (!user.Contains("JPhontain"))
-                {
-                    // not logged in
-                    context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
-                }
+                // not logged in
+                context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
     }
+}

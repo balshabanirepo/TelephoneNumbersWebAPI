@@ -12,7 +12,7 @@ namespace TelephoneNumbersWebAPI.Helpers
 {
     public class JwtMiddleware
     {
-        
+
         private readonly IConfiguration _config;
         private readonly RequestDelegate _next;
 
@@ -31,7 +31,7 @@ namespace TelephoneNumbersWebAPI.Helpers
                 context.Items["userName"] = tokenParts[tokenParts.Length - 2];
 
             }
-           //     attachUserToContext(context,  token);
+            //     attachUserToContext(context,  token);
 
             await _next(context);
         }
@@ -58,7 +58,7 @@ namespace TelephoneNumbersWebAPI.Helpers
                 // attach user to context on successful jwt validation
                 context.Items["userName"] = userName;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // do nothing if jwt validation fails
                 // user is not attached to context so request won't have access to secure routes
