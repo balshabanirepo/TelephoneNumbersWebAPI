@@ -34,7 +34,7 @@ namespace TelephoneNumbersWebAPI.Helpers
             //     attachUserToContext(context,  token);
 
             await _next(context);
-        }
+         }
 
         private void attachUserToContext(HttpContext context, string token)
         {
